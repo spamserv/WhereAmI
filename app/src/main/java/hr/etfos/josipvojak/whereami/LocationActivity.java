@@ -39,6 +39,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 
 public class LocationActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -48,6 +50,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     private MapFragment mMapFragment;
     private GoogleMap.OnMapClickListener mCustomOnMapClickListener;
     private TextView tvCurrentLocation, tvLocation;
+    List<Address> addresses;
 
     // Variables for sound pool
     private SoundPool myPool;
@@ -110,14 +113,25 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         this.mCustomOnMapClickListener = new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
+                String country = "no one has every been";
+                try {
+                    addresses = mGeocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if(addresses != null) {
+                    country = "in " + addresses.get(0).getCountryName();
+                }
+
                 MarkerOptions newMarkerOptions = new MarkerOptions();
                 newMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_icon_purple));
                 newMarkerOptions.title("Marked place");
-                newMarkerOptions.snippet("MPM (Moj prvi marker)");
+                newMarkerOptions.snippet("Somewhere " + country);
                 newMarkerOptions.position(latLng);
                 mGoogleMap.addMarker(newMarkerOptions);
 
-                tvLocation.setText("Location: \n" + latLng.toString());
+                //tvLocation.setText("Location: \n" + latLng.toString());
 
                 if (loaded) {
                     myPool.play(ID, 1, 1, 1, 0, 1f);
