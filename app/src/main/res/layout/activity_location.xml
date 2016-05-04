@@ -20,4 +20,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvCurrentLocation"/>
 
+    <Button
+        android:id="@+id/btnTakePicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/takePictureText"
+        android:onClick="btnTakePicture"/>
+
 </RelativeLayout>

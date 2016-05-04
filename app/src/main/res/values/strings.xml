@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">WhereAmI</string>
+    <string name="takePictureText">Take Picture!</string>
 </resources>

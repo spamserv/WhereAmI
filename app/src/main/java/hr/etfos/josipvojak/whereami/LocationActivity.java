@@ -1,8 +1,10 @@
 package hr.etfos.josipvojak.whereami;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 
+import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -11,10 +13,16 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -25,7 +33,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.File;
 import java.io.IOException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
@@ -38,6 +49,8 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     SoundPool myPool;
     boolean loaded;
     int ID;
+    Uri photo;
+    Button btnTakePicture;
 
     private LocationManager mLocationManager;
     private Location mLocation;
@@ -89,7 +102,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             @Override
             public void onMapClick(LatLng latLng) {
                 MarkerOptions newMarkerOptions = new MarkerOptions();
-                newMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher));
+                newMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_icon_purple));
                 newMarkerOptions.title("Marked place");
                 newMarkerOptions.snippet("MPM (Moj prvi marker)");
                 newMarkerOptions.position(latLng);
@@ -128,7 +141,6 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             public void onProviderDisabled(String provider) {
             }
         };
-
 
     }
 
@@ -183,5 +195,35 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             return;
         }
         this.mGoogleMap.setMyLocationEnabled(true);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+       /* if (requestCode == 10 && resultCode == RESULT_OK &&      data != null && data.hasExtra("data")) {
+            ((ImageView) findViewById(R.id.ivMyImage)).setImageBitmap((Bitmap) data.getParcelableExtra("data"));
+        }  */
+
+        if (requestCode == 20 && resultCode == RESULT_OK &&  photo != null){
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(photo, "image/*");
+            startActivity(intent);
+        }
+    }
+
+    public void btnTakePicture(View view) {
+        //startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), 10);
+
+        String timestamp  = "timestamp";
+        String filename = "IMG_"+timestamp;
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        try {
+            File image = File.createTempFile(filename,".jpg", storageDir);
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (image != null) {
+                photo = Uri.fromFile(image);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photo);
+                startActivityForResult(takePictureIntent, 20);
+            }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 }
