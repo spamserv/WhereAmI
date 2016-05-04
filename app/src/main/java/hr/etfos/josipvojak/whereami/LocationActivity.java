@@ -40,7 +40,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 
 public class LocationActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -49,7 +48,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     private GoogleMap mGoogleMap;
     private MapFragment mMapFragment;
     private GoogleMap.OnMapClickListener mCustomOnMapClickListener;
-    private TextView tvCurrentLocation, tvLocation;
+    private TextView tvCurrentLocation;
     List<Address> addresses;
 
     // Variables for sound pool
@@ -104,7 +103,6 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     private void initialize() {
 
         tvCurrentLocation = (TextView) findViewById(R.id.tvCurrentLocation);
-        tvLocation = (TextView) findViewById(R.id.tvLocation);
 
         mPictureTimeStampLocation = "UnknownLocation";
 
@@ -172,7 +170,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         this.mLocation = location;
         if(null != this.mLocation)
         {
-            locationText = "Lat: " + this.mLocation.getLatitude() + "\n" +
+            locationText = "Your current location:\nLat: " + this.mLocation.getLatitude() + "\n" +
                     "Lon: " + this.mLocation.getLongitude() + "\n" +
                     "Alt: " + this.mLocation.getAltitude();
             // Careful with this, this is just a simple example, be sure to read the docs
@@ -231,7 +229,6 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     public void btnTakePicture(View view) {
-        //startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), 10);
         String timestamp = mPictureTimeStampLocation;
 
         String filename = "IMG_"+ timestamp;
