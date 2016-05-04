@@ -1,10 +1,15 @@
 package hr.etfos.josipvojak.whereami;
 
 import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -12,8 +17,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.AudioManager;
+import android.media.RingtoneManager;
 import android.media.SoundPool;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -209,14 +216,8 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-       /* if (requestCode == 10 && resultCode == RESULT_OK &&      data != null && data.hasExtra("data")) {
-            ((ImageView) findViewById(R.id.ivMyImage)).setImageBitmap((Bitmap) data.getParcelableExtra("data"));
-        }  */
-
         if (requestCode == 20 && resultCode == RESULT_OK &&  photo != null){
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(photo, "image/*");
-            startActivity(intent);
+            displayNotification();
         }
     }
 
@@ -235,5 +236,29 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                 startActivityForResult(takePictureIntent, 20);
             }
         } catch (IOException e) { e.printStackTrace(); }
+
     }
+
+    public void displayNotification() {
+        NotificationManager nm = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setDataAndType(photo, "image/*");
+        PendingIntent pI = PendingIntent.getActivity(this, 0, i, 0);
+
+        //For API level 16 and above
+        Notification.Builder builder = new Notification.Builder(this);
+        // Below API level 16
+        // NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        long[] pattern = new long[]{1000,1000,1000,1000,1000};
+        Notification n = builder.setContentTitle("You just took photo!")
+                .setContentText("Click to see your picture in gallery!")
+                .setContentIntent(pI)
+                .setSmallIcon(R.drawable.marker_icon_purple)
+                .setWhen(System.currentTimeMillis())
+                .setAutoCancel(true)
+                .setVibrate(pattern)
+                .setLights(Color.RED, 2000, 1000)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .build();
+        nm.notify(1,n);  }
 }
