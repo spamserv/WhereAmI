@@ -42,19 +42,24 @@ import java.util.ArrayList;
 
 public class LocationActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    GoogleMap mGoogleMap;
-    MapFragment mMapFragment;
+    //Variables for Google maps
+    private GoogleMap mGoogleMap;
+    private MapFragment mMapFragment;
     private GoogleMap.OnMapClickListener mCustomOnMapClickListener;
-    TextView tvCurrentLocation, tvLocation;
-    SoundPool myPool;
-    boolean loaded;
-    int ID;
-    Uri photo;
-    Button btnTakePicture;
+    private TextView tvCurrentLocation, tvLocation;
 
+    // Variables for sound pool
+    private SoundPool myPool;
+    boolean loaded;
+    private int ID;
+
+    // Variables for photos
+    private Uri photo;
+
+    // Variables for Location
     private LocationManager mLocationManager;
     private Location mLocation;
-    private String mProvider;
+    private String mProvider, mPictureTimeStampLocation;
     private Criteria mCriteria;
     private Geocoder mGeocoder;
     private LocationListener mLocationListener;
@@ -95,6 +100,8 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     private void initialize() {
         tvCurrentLocation = (TextView) findViewById(R.id.tvCurrentLocation);
         tvLocation = (TextView) findViewById(R.id.tvLocation);
+
+        mPictureTimeStampLocation = "UnknownLocation";
 
         this.mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         this.mMapFragment.getMapAsync(this);
@@ -153,6 +160,9 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                     "Lon: " + this.mLocation.getLongitude() + "\n" +
                     "Alt: " + this.mLocation.getAltitude();
             // Careful with this, this is just a simple example, be sure to read the docs
+
+            mPictureTimeStampLocation = this.mLocation.getLatitude() + "_" + this.mLocation.getLongitude();
+
             if(null != this.mGeocoder)
             {
                 try {
@@ -212,9 +222,9 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
     public void btnTakePicture(View view) {
         //startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), 10);
+        String timestamp = mPictureTimeStampLocation;
 
-        String timestamp  = "timestamp";
-        String filename = "IMG_"+timestamp;
+        String filename = "IMG_"+ timestamp;
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         try {
             File image = File.createTempFile(filename,".jpg", storageDir);
