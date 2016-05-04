@@ -85,7 +85,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         }
 
         this.mLocationManager.requestLocationUpdates(
-                this.mProvider, 1000, 10, this.mLocationListener);
+                this.mProvider, 1000, 1, this.mLocationListener);
     }
 
     private void initializeSound() {
@@ -127,8 +127,6 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                 newMarkerOptions.snippet("Somewhere " + country);
                 newMarkerOptions.position(latLng);
                 mGoogleMap.addMarker(newMarkerOptions);
-
-                //tvLocation.setText("Location: \n" + latLng.toString());
 
                 if (loaded) {
                     myPool.play(ID, 1, 1, 1, 0, 1f);
