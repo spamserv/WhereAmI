@@ -1,14 +1,12 @@
 package hr.etfos.josipvojak.whereami;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Criteria;
@@ -20,7 +18,6 @@ import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.media.SoundPool;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -28,8 +25,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.view.Window;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -42,8 +38,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
@@ -105,6 +99,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     private void initialize() {
+
         tvCurrentLocation = (TextView) findViewById(R.id.tvCurrentLocation);
         tvLocation = (TextView) findViewById(R.id.tvLocation);
 
