@@ -12,12 +12,23 @@
     <TextView
         android:id="@+id/tvCurrentLocation"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/map"
+        android:layout_marginBottom="40dp"
+        android:textSize="10sp"/>
 
-    <TextView
-        android:id="@+id/tvLocation"
+
+    <Button
+        android:id="@+id/btnTakePicture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvCurrentLocation"/>
+        android:text="@string/takePictureText"
+        android:onClick="btnTakePicture"
+        android:layout_alignBottom="@+id/map"
+        android:layout_centerHorizontal="true"
+        android:textSize="10sp"
+        android:layout_margin="5dp"
+        android:padding="6dp"
+        android:background="@drawable/custom_button"/>
 
 </RelativeLayout>
